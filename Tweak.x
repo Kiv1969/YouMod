@@ -4,56 +4,41 @@
 // Navigation Bar
 
 // YouTube Premium logo
-%hook UIImageView
-- (void)setImage:(UIImage *)image {
+%hook YTHeaderLogoController
+- (void)setTopbarLogoRenderer:(YTITopbarLogoRenderer *)renderer {
     if (!IS_ENABLED(YTPremiumLogo)) {
         %orig;
         return;
     }
-    NSString *imgDesc = [image description];
-    BOOL isLight = [imgDesc containsString:@"Resources: youtube_logo)"];
-    BOOL isDark = [imgDesc containsString:@"Resources: youtube_logo_dark)"];
-    if (isLight || isDark) {
-        NSString *resourcesPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Frameworks/Module_Framework.framework/Innertube_Resources.bundle"];
-        // Check if the first path exists; if not, use the fallback
-        if (![[NSFileManager defaultManager] fileExistsAtPath:resourcesPath]) {
-            resourcesPath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Innertube_Resources.bundle"];
-        }
-        NSBundle *frameworkBundle = [NSBundle bundleWithPath:resourcesPath];
-        if (frameworkBundle) {
-            if (isLight) {
-                image = [UIImage imageNamed:@"youtube_premium_logo" inBundle:frameworkBundle compatibleWithTraitCollection:nil];
-            } else if (isDark) {
-                image = [UIImage imageNamed:@"youtube_premium_logo_white" inBundle:frameworkBundle compatibleWithTraitCollection:nil];
-            }
-        }
-    }
-    %orig(image);
-}
-%end
-
-/* Second Way
-// YouTube Premium Logo - @arichornlover & bhackel
-%hook YTHeaderLogoControllerImpl // originally was "YTHeaderLogoController"
-- (void)setTopbarLogoRenderer:(YTITopbarLogoRenderer *)renderer {
     // Modify the type of the icon before setting the renderer
     YTIIcon *icon = renderer.iconImage;
     if (icon) {
-        icon.iconType = YT_PREMIUM_LOGO; // magic number (537) for Premium icon, hopefully it doesnt change. 158 (YT_DEFAULT_LOGO) is default logo.
-        }
-    // Use this modified renderer
-    %orig;
+        icon.iconType = YT_PREMIUM_LOGO; // 537
+    }
+    %orig(renderer);
 }
 // For when spoofing before 18.34.5
-- (void)setPremiumLogo:(BOOL)isPremiumLogo {
-    isPremiumLogo = YES;
-    %orig;
-}
-- (BOOL)isPremiumLogo {
-    return YES;
-}
+- (void)setPremiumLogo:(BOOL)arg { IS_ENABLED(YTPremiumLogo) ? %orig(YES) : %orig; }
+- (BOOL)isPremiumLogo { return IS_ENABLED(YTPremiumLogo) ? YES : %orig; }
 %end
-*/
+
+%hook YTHeaderLogoControllerImpl
+- (void)setTopbarLogoRenderer:(YTITopbarLogoRenderer *)renderer {
+    if (!IS_ENABLED(YTPremiumLogo)) {
+        %orig;
+        return;
+    }
+    // Modify the type of the icon before setting the renderer
+    YTIIcon *icon = renderer.iconImage;
+    if (icon) {
+        icon.iconType = YT_PREMIUM_LOGO; // 537
+    }
+    %orig(renderer);
+}
+// For when spoofing before 18.34.5
+- (void)setPremiumLogo:(BOOL)arg { IS_ENABLED(YTPremiumLogo) ? %orig(YES) : %orig; }
+- (BOOL)isPremiumLogo { return IS_ENABLED(YTPremiumLogo) ? YES : %orig; }
+%end
 
 // Hide Navigation Bar Buttons
 %hook YTRightNavigationButtons
@@ -102,19 +87,26 @@
 %hook YTIElementRenderer
 - (NSData *)elementData {
     NSString *description = [self description];
-    // Fast checks
-    if (IS_ENABLED(HideHoriShelf) && [description containsString:@"horizontal-video-shelf.eml"]) return nil;
-    if (IS_ENABLED(HideGenMusicShelf) && [description containsString:@"feed_nudge.view"]) return nil;
-    if (IS_ENABLED(HideMixPlayLists) && [description containsString:@"eml.vwc"]) return nil;
-    if (IS_ENABLED(HideShortsShelf) && [description containsString:@"eml.shorts-shelf"]) return nil;
-    /*
-    NSArray *shortsToRemove = @[@"shorts_shelf.eml", @"shorts_video_cell.eml", @"6Shorts", @"eml.shorts-shelf"];
-    for (NSString *shorts in shortsToRemove) {
-        if ([description containsString:shorts] && ![description containsString:@"history*"]) {
+    NSDictionary *filters = @{
+        @"horizontal-video-shelf.eml" : @(IS_ENABLED(HideHoriShelf)),
+        @"feed_nudge.view"           : @(IS_ENABLED(HideGenMusicShelf)),
+        @"eml.vwc"                   : @(IS_ENABLED(HideMixPlayLists)),
+        @"eml.shorts-shelf"          : @(IS_ENABLED(HideShortsShelf)),
+        @"shorts_shelf.eml"          : @(IS_ENABLED(HideShortsShelf)),
+        @"shorts_video_cell.eml"     : @(IS_ENABLED(HideShortsShelf)),
+        @"6Shorts"                   : @(IS_ENABLED(HideShortsShelf))
+    };
+    // Loop through the dictionary
+    for (NSString *key in filters) {
+        BOOL isEnabled = [filters[key] boolValue];
+        if (isEnabled && [description containsString:key]) {
+            // Special exception for Shorts
+            if ([key containsString:@"shorts"] && [description containsString:@"history*"]) {
+                return %orig;
+            }
             return nil;
         }
     }
-    */
     return %orig;
 }
 %end
