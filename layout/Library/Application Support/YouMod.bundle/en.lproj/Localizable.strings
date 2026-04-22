@@ -2,6 +2,7 @@
 "NEW_ISSUES_DESC" = "Found bugs or want to request new features? Tap here.";
 "SOURCE_CODES" = "Sources codes";
 "SOURCE_CODES_DESC" = "Take a look at the codes!";
+
 "NAVBAR" = "Navigation bar";
 "HIDE_YT_LOGO" = "Hide YouTube logo";
 "HIDE_YT_LOGO_DESC" = "Hide YouTube logo from the navigation bar.";
@@ -15,6 +16,7 @@
 "HIDE_VOICE_SEARCH_BUTTON_DESC" = "Hide voice search button from the navigation bar.";
 "HIDE_CAST_BUTTON" = "Hide cast button";
 "HIDE_CAST_BUTTON_DESC" = "Hide cast button from the navigation bar.";
+
 "FEED" = "Feed";
 "HIDE_SUBBAR" = "Hide subbar";
 "HIDE_SUBBAR_DESC" = "Hide subbar at the top of the feed.";
@@ -26,4 +28,20 @@
 "HIDE_MUSIC_PLAYLISTS_DESC" = "Hide music playlist generator (Select music tunes from three) from the feed.";
 "HIDE_SHORTS_SHELF" = "Hide Shorts shelf";
 "HIDE_SHORTS_SHELF_DESC" = "Hide Shorts shelf from the feed.";
+
 "PLAYER" = "Player";
+
+
+"TABBAR" = "Tab bar";
+"HIDE_TAB_INDI" = "Hide tab indicators";
+"HIDE_TAB_INDI_DESC" = "Hide all tab indicators from the tab bar.";
+"HIDE_TAB_LABELS" = "Hide tab labels";
+"HIDE_TAB_LABELS_DESC" = "Hide all tab labels from the tab bar.";
+"HIDE_HOME_TAB" = "Hide Home tab";
+"HIDE_HOME_TAB_DESC" = "Hide Home tab from the tab bar.";
+"HIDE_SHORTS_TAB" = "Hide Shorts tab";
+"HIDE_SHORTS_TAB_DESC" = "Hide Shorts tab from the tab bar.";
+"HIDE_CREATE_BUTTON" = "Hide Create button";
+"HIDE_CREATE_BUTTON_DESC" = "Hide Create button from the tab bar.";
+"HIDE_SUBSCRIPT_TAB" = "Hide Subscriptions tab";
+"HIDE_SUBSCRIPT_TAB_DESC" = "Hide Subscriptions tab from the tab bar.";

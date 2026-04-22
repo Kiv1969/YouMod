@@ -326,6 +326,105 @@ NSBundle *YouModBundle() {
         }];
     [sectionItems addObject:player];
 
+
+
+
+    // Section 4
+    // Tab bar
+    YTSettingsSectionItem *tabbar = [YTSettingsSectionItemClass itemWithTitle:nil
+        titleDescription:LOC(@"TABBAR")
+        accessibilityIdentifier:nil
+        detailTextBlock:nil
+        selectBlock:^BOOL (YTSettingsCell *cell, NSUInteger arg1) {
+            return NO;
+        }];
+    [sectionItems addObject:tabbar];
+
+    /* Default tab - Later
+    YTSettingsSectionItem *hideshortsself = [YTSettingsSectionItemClass switchItemWithTitle:LOC(@"HIDE_SHORTS_SHELF")
+        titleDescription:LOC(@"HIDE_SHORTS_SHELF_DESC") // Hide from the feed
+        accessibilityIdentifier:nil
+        switchOn:IS_ENABLED(HideShortsShelf)
+        switchBlock:^BOOL (YTSettingsCell *cell, BOOL enabled) {
+            [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:HideShortsShelf];
+            return YES;
+        }
+        settingItemId:0];
+    [sectionItems addObject:hideshortsself];
+    */
+
+    // Hide tab indicators
+    YTSettingsSectionItem *hidetabindi = [YTSettingsSectionItemClass switchItemWithTitle:LOC(@"HIDE_TAB_INDI")
+        titleDescription:LOC(@"HIDE_TAB_INDI_DESC")
+        accessibilityIdentifier:nil
+        switchOn:IS_ENABLED(HideTabIndi)
+        switchBlock:^BOOL (YTSettingsCell *cell, BOOL enabled) {
+            [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:HideTabIndi];
+            return YES;
+        }
+        settingItemId:0];
+    [sectionItems addObject:hidetabindi];
+
+    // Hide tab labels
+    YTSettingsSectionItem *hidetablabels = [YTSettingsSectionItemClass switchItemWithTitle:LOC(@"HIDE_TAB_LABELS")
+        titleDescription:LOC(@"HIDE_TAB_LABELS_DESC")
+        accessibilityIdentifier:nil
+        switchOn:IS_ENABLED(HideTabLabels)
+        switchBlock:^BOOL (YTSettingsCell *cell, BOOL enabled) {
+            [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:HideTabLabels];
+            return YES;
+        }
+        settingItemId:0];
+    [sectionItems addObject:hidetablabels];
+
+    // Hide home tab
+    YTSettingsSectionItem *hidehometab = [YTSettingsSectionItemClass switchItemWithTitle:LOC(@"HIDE_HOME_TAB")
+        titleDescription:LOC(@"HIDE_HOME_TAB_DESC")
+        accessibilityIdentifier:nil
+        switchOn:IS_ENABLED(HideHomeTab)
+        switchBlock:^BOOL (YTSettingsCell *cell, BOOL enabled) {
+            [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:HideHomeTab];
+            return YES;
+        }
+        settingItemId:0];
+    [sectionItems addObject:hidehometab];
+
+    // Hide Shorts tab
+    YTSettingsSectionItem *hideshortstab = [YTSettingsSectionItemClass switchItemWithTitle:LOC(@"HIDE_SHORTS_TAB")
+        titleDescription:LOC(@"HIDE_SHORTS_TAB_DESC")
+        accessibilityIdentifier:nil
+        switchOn:IS_ENABLED(HideShortsTab)
+        switchBlock:^BOOL (YTSettingsCell *cell, BOOL enabled) {
+            [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:HideShortsTab];
+            return YES;
+        }
+        settingItemId:0];
+    [sectionItems addObject:hideshortstab];
+
+    // Hide Create button
+    YTSettingsSectionItem *hidecreatebutton = [YTSettingsSectionItemClass switchItemWithTitle:LOC(@"HIDE_CREATE_BUTTON")
+        titleDescription:LOC(@"HIDE_CREATE_BUTTON_DESC")
+        accessibilityIdentifier:nil
+        switchOn:IS_ENABLED(HideCreateButton)
+        switchBlock:^BOOL (YTSettingsCell *cell, BOOL enabled) {
+            [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:HideCreateButton];
+            return YES;
+        }
+        settingItemId:0];
+    [sectionItems addObject:hidecreatebutton];
+
+    // Hide Subscriptions tab
+    YTSettingsSectionItem *hidesubscripttab = [YTSettingsSectionItemClass switchItemWithTitle:LOC(@"HIDE_SUBSCRIPT_TAB")
+        titleDescription:LOC(@"HIDE_SUBSCRIPT_TAB_DESC")
+        accessibilityIdentifier:nil
+        switchOn:IS_ENABLED(HideSubscriptTab)
+        switchBlock:^BOOL (YTSettingsCell *cell, BOOL enabled) {
+            [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:HideSubscriptTab];
+            return YES;
+        }
+        settingItemId:0];
+    [sectionItems addObject:hidesubscripttab];
+
     // More coming soon...
 
     if ([settingsViewController respondsToSelector:@selector(setSectionItems:forCategory:title:icon:titleDescription:headerHidden:)]) {

@@ -36,6 +36,12 @@
 #define HideGenMusicShelf @"YouModHideGenMusicShelf"
 #define HideShortsShelf @"YouModHideShortsShelf"
 #define HideSubbar @"YouModHideSubbar"
+#define HideTabIndi @"YouModHideTabIndicators"
+#define HideTabLabels @"YouModHideTabLabels"
+#define HideHomeTab @"YouModHideHomeTab"
+#define HideShortsTab @"YouModHideShortsTab"
+#define HideCreateButton @"YouModHideCreateButton"
+#define HideSubscriptTab @"YouModHideSubscriptionsTab"
 
 @interface YTITopbarLogoRenderer : NSObject
 @property(readonly, nonatomic) YTIIcon *iconImage;

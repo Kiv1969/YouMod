@@ -107,10 +107,15 @@
 %hook YTIElementRenderer
 - (NSData *)elementData {
     NSString *description = [self description];
+    NSLog(@"[YouMod Debug] Description from Renderer is: %@", description); // Will need to look into this later
+    // Try all
     NSDictionary *filters = @{
         @"horizontal-video-shelf.eml" : @(IS_ENABLED(HideHoriShelf)),
+        @"eml.horizontal-video-shelf" : @(IS_ENABLED(HideHoriShelf)),
         @"feed_nudge.view"           : @(IS_ENABLED(HideGenMusicShelf)),
+        @"view.feed_nudge"           : @(IS_ENABLED(HideGenMusicShelf)),
         @"eml.vwc"                   : @(IS_ENABLED(HideMixPlayLists)),
+        @"vwc.eml"                   : @(IS_ENABLED(HideMixPlayLists)),
         @"eml.shorts-shelf"          : @(IS_ENABLED(HideShortsShelf)),
         @"shorts_shelf.eml"          : @(IS_ENABLED(HideShortsShelf)),
         @"shorts_video_cell.eml"     : @(IS_ENABLED(HideShortsShelf)),
@@ -447,86 +452,45 @@
 %hook YTPivotBarView
 - (void)setRenderer:(YTIPivotBarRenderer *)renderer {
     NSMutableArray <YTIPivotBarSupportedRenderers *> *items = [renderer itemsArray];
-    
-    // We use an IndexSet to "mark" the buttons for deletion
     NSMutableIndexSet *indicesToRemove = [NSMutableIndexSet indexSet];
-
     // Loop through every item in the bar
     for (NSUInteger i = 0; i < items.count; i++) {
         YTIPivotBarSupportedRenderers *item = items[i];
         NSString *pID = [[item pivotBarItemRenderer] pivotIdentifier];
         NSString *pID2 = [[item pivotBarIconOnlyItemRenderer] pivotIdentifier];
-
-        // If the ID matches any of these, mark it for removal
-        //if ([pID isEqualToString:@"FEshorts"]) {
-        //    [indicesToRemove addIndex:i];
-        //}
-        if ([pID2 isEqualToString:@"FEuploads"]) {
-            [indicesToRemove addIndex:i];
-            // pID.hidden = YES;
-            // [self removeFromSuperview];
+        if ([pID isEqualToString:@"FEwhat_to_watch"] && IS_ENABLED(HideHomeTab)) {
+             [indicesToRemove addIndex:i];
         }
-        if ([pID isEqualToString:@"FEsubscriptions"]) {
+        if ([pID isEqualToString:@"FEshorts"] && IS_ENABLED(HideShortsTab)) {
             [indicesToRemove addIndex:i];
         }
-        // if ([pID isEqualToString:@"FEwhat_to_watch"] && HideHome()) {
-        //     [indicesToRemove addIndex:i];
-        // }
+        if ([pID2 isEqualToString:@"FEuploads"] && IS_ENABLED(HideCreateTab)) {
+            [indicesToRemove addIndex:i];
+        }
+        if ([pID isEqualToString:@"FEsubscriptions"] && IS_ENABLED(HideSubscriptTab)) {
+            [indicesToRemove addIndex:i];
+        }
     }
-
     // Remove them all at once so the layout doesn't break
     [items removeObjectsAtIndexes:indicesToRemove];
-    
     %orig(renderer);
 }
 %end
-
-/*
-// Remove Tabs
-%hook YTPivotBarView
-- (void)setRenderer:(YTIPivotBarRenderer *)renderer {
-    NSMutableArray <YTIPivotBarSupportedRenderers *> *items = [renderer itemsArray];
-
-    NSDictionary *identifiersToRemove = @{
-        // @"FEshorts",
-        @"FEsubscriptions",
-        @"FEuploads"
-        // @"FElibrary"
-    };
-
-    for (NSString *identifier in identifiersToRemove) {
-        NSArray *removeValues = identifiersToRemove[identifier];
-        BOOL shouldRemoveItem = [removeValues containsObject:@(YES)];
-
-        NSUInteger index = [items indexOfObjectPassingTest:^BOOL(YTIPivotBarSupportedRenderers *renderer, NSUInteger idx, BOOL *stop) {
-            if ([identifier isEqualToString:@"FEuploads"]) {
-                return shouldRemoveItem && [[[renderer pivotBarIconOnlyItemRenderer] pivotIdentifier] isEqualToString:identifier];
-            } else {
-                return shouldRemoveItem && [[[renderer pivotBarItemRenderer] pivotIdentifier] isEqualToString:identifier];
-            }
-        }];
-
-        if (index != NSNotFound) {
-            [items removeObjectAtIndex:index];
-        }
-    }
-    %orig(renderer);
-}
-%end
-*/
 
 // Hide Tab Bar Indicators
 %hook YTPivotBarIndicatorView
-- (void)setFillColor:(id)arg1 { %orig([UIColor clearColor]); }
-- (void)setBorderColor:(id)arg1 { %orig([UIColor clearColor]); }
+- (void)setFillColor:(id)arg1 { IS_ENABLED(HideTabIndi) ? %orig([UIColor clearColor]) : %orig; }
+- (void)setBorderColor:(id)arg1  { IS_ENABLED(HideTabIndi) ? %orig([UIColor clearColor]) : %orig; }
 %end
 
 // Hide Tab Labels
 %hook YTPivotBarItemView
 - (void)setRenderer:(YTIPivotBarRenderer *)renderer {
     %orig;
-    [self.navigationButton setTitle:@"" forState:UIControlStateNormal];
-    [self.navigationButton setSizeWithPaddingAndInsets:NO];
+    if (IS_ENABLED(HideTabLabels)) {
+        [self.navigationButton setTitle:@"" forState:UIControlStateNormal];
+        [self.navigationButton setSizeWithPaddingAndInsets:NO];
+    }
 }
 %end
 
