@@ -464,7 +464,7 @@
         if ([pID isEqualToString:@"FEshorts"] && IS_ENABLED(HideShortsTab)) {
             [indicesToRemove addIndex:i];
         }
-        if ([pID2 isEqualToString:@"FEuploads"] && IS_ENABLED(HideCreateTab)) {
+        if ([pID2 isEqualToString:@"FEuploads"] && IS_ENABLED(HideCreateButton)) {
             [indicesToRemove addIndex:i];
         }
         if ([pID isEqualToString:@"FEsubscriptions"] && IS_ENABLED(HideSubscriptTab)) {
