@@ -121,20 +121,6 @@
 }
 %end
 
-// I ran out of ideas
-// If shorts button is rendered by YTQTMButton, can we filter the button here?
-%hook QTMButton
-
-- (void)layoutSubviews {
-    %orig;
-    if ([self.accessibilityIdentifier isEqualToString:@"id.reel_remix_button"]) {
-		[self removeFromSuperview];
-        self.hidden = YES;
-    }
-}
-
-%end
-
 %hook _ASDisplayView
 
 - (void)didMoveToWindow {
@@ -199,6 +185,7 @@
     return YES;
 }
 
+/*
 // Will disable this if this doesn't work
 - (void)layoutSubviews {
 	%orig;
@@ -209,12 +196,15 @@
     [[self valueForKey:@"_playPauseButton"] setBackgroundColor:nil];
 }
 %end
+*/
 
+/* idk what is this thing does
 %hook YTColdConfig
 - (BOOL)isLandscapeEngagementPanelEnabled {
     return NO;
 }
 %end
+*/
 
 // Remove Dark Background in Overlay
 %hook YTMainAppVideoPlayerOverlayView
@@ -249,7 +239,7 @@
 - (BOOL)shouldExitFullScreenOnFinish { return IS_ENABLED(AutoExitFullScreen) ? YES : %orig; }
 %end
 
-
+// Enables shorts quality - works best with YTClassicVideoQuality
 %hook YTHotConfig
 - (BOOL)enableOmitAdvancedMenuInShortsVideoQualityPicker { return YES; }
 - (BOOL)enableShortsVideoQualityPicker { return YES; }
@@ -290,21 +280,10 @@
 %end
 
 %hook YTHeaderView
-- (BOOL)stickyNavHeaderEnabled { return YES; } 
+- (BOOL)stickyNavHeaderEnabled { return YES; } // idk what is this does, the nav is already sticky... 
 %end
 
-/*
-%hook YTColdConfig
-- (BOOL)removeNextPaddleForAllVideos { 
-    return YES; 
-}
-- (BOOL)removePreviousPaddleForAllVideos { 
-    return YES; 
-}
-%end
-*/
-
-// Always use remaining time in the video player - @bhackel
+// Always use remaining time in the video player - @bhackel WORKS!
 %hook YTPlayerBarController
 // When a new video is played, enable time remaining flag
 - (void)setActiveSingleVideo:(id)arg1 {
@@ -318,7 +297,7 @@
 }
 %end
 
-// Disable toggle time remaining - @bhackel
+// Disable toggle time remaining - @bhackel WORKS
 %hook YTInlinePlayerBarContainerView
 - (void)setShouldDisplayTimeRemaining:(BOOL)arg1 {
     %orig(YES);
@@ -401,6 +380,7 @@
 %end
 */
 
+// works i guess
 // Disable Fullscreen Actions
 %hook YTFullscreenActionsView
 - (BOOL)enabled { return NO; }
@@ -425,10 +405,10 @@
 
 // Portrait Fullscreen
 %hook YTWatchViewController
-- (unsigned long long)allowedFullScreenOrientations { return PortraitFullscreen() ? UIInterfaceOrientationMaskAllButUpsideDown; }
+- (unsigned long long)allowedFullScreenOrientations { return PortraitFullscreen() ? UIInterfaceOrientationMaskAllButUpsideDown; } // wth is this?
 %end
 
-// Disable Autoplay
+// Disable Autoplay 
 %hook YTPlaybackConfig
 - (void)setStartPlayback:(BOOL)arg1 { NoAutoPlay() ? %orig(NO); }
 %end
@@ -449,10 +429,10 @@
 %end
 
 %hook YTFullscreenEngagementOverlayView
-- (void)setRelatedVideosView:(id)arg {}
+- (void)setRelatedVideosView:(id)arg {} //works -hide recommend video after finished
 %end
 
-// Disable Snap To Chapter (https://github.com/qnblackcat/uYouPlus/blob/main/uYouPlus.xm#L457-464)
+// Disable Snap To Chapter (https://github.com/qnblackcat/uYouPlus/blob/main/uYouPlus.xm#L457-464) - GOT REMOVED
 // %hook YTSegmentableInlinePlayerBarView
 // - (void)didMoveToWindow { %orig; if (ytlBool(@"dontSnapToChapter")) self.enableSnapToChapter = NO; }
 // %end
@@ -489,13 +469,13 @@
 %new
 - (void)autoFullscreen {
     YTWatchController *watchController = [self valueForKey:@"_UIDelegate"];
-    [watchController showFullScreen];
+    [watchController showFullScreen]; // wil try
 }
 
 %new
 - (void)shortsToRegular {
     if (self.contentVideoID != nil && [self.parentViewController isKindOfClass:NSClassFromString(@"YTShortsPlayerViewController")]) {
-        NSString *vidLink = [NSString stringWithFormat:@"vnd.youtube://%@", self.contentVideoID];
+        NSString *vidLink = [NSString stringWithFormat:@"vnd.youtube://%@", self.contentVideoID]; // idk about this
         if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:vidLink]]) {
             [[UIApplication sharedApplication] openURL:[NSURL URLWithString:vidLink] options:@{} completionHandler:nil];
         }
@@ -505,29 +485,15 @@
 %new
 - (void)turnOffCaptions {
     if ([self.view.superview isKindOfClass:NSClassFromString(@"YTWatchView")]) {
-        [self setActiveCaptionTrack:nil];
+        [self setActiveCaptionTrack:nil]; // will try this
     }
-}
-
-- (void)singleVideo:(YTSingleVideoController *)video currentVideoTimeDidChange:(YTSingleVideoTime *)time {
-    %orig;
-
-    addEndTime(self, video, time);
-    autoSkipShorts(self, video, time);
-}
-
-- (void)potentiallyMutatedSingleVideo:(YTSingleVideoController *)video currentVideoTimeDidChange:(YTSingleVideoTime *)time {
-    %orig;
-
-    addEndTime(self, video, time);
-    autoSkipShorts(self, video, time);
 }
 %end
 
 // Fix Playlist Mini-bar Height For Small Screens
 %hook YTPlaylistMiniBarView
 - (void)setFrame:(CGRect)frame {
-    if (frame.size.height < 54.0) frame.size.height = 54.0;
+    if (frame.size.height < 54.0) frame.size.height = 54.0; // what
     %orig(frame);
 }
 %end
@@ -550,7 +516,7 @@
 }
 %end
 
-/*
+/* untested
 // Remove Download button from the menu
 %hook YTDefaultSheetController
 - (void)addAction:(YTActionSheetAction *)action {
@@ -625,15 +591,15 @@ BOOL isTabSelected = NO;
 - (void)viewDidAppear:(BOOL)animated {
     %orig;
     if (!isTabSelected) {
-        NSArray *pivotIdentifiers = @[@"FEwhat_to_watch", @"FEexplore", @"FEshorts", @"FEsubscriptions", @"FElibrary"];
-        [self selectItemWithPivotIdentifier:pivotIdentifiers[ytlInt(@"pivotIndex")]];
-        isTabSelected = YES;
+        NSArray *pivotIdentifiers = @[@"FEwhat_to_watch", @"FEshorts", @"FEsubscriptions", @"FElibrary"];
+        [self selectItemWithPivotIdentifier:pivotIdentifiers[ytlInt(@"pivotIndex")]]; // Set int here
+        isTabSelected = YES; // will need to setup the settings
     }
 }
 %end
 */
 
-// Thanks to aricloverEXTRA for all of these logics!
+// Thanks to aricloverEXTRA for all of these logics! - not working very well but it works
 // YTHidePlayerButtons 1.0.0 - made by @aricloverEXTRA
 static NSDictionary<NSString *, NSString *> *HideToggleMap(void) {
     static NSDictionary<NSString *, NSString *> *map = nil;
