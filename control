@@ -2,7 +2,7 @@ Package: dev.water888.youmod
 Name: YouMod
 Depends: mobilesubstrate
 Version: 1.0.0
-Architecture: iphoneos-arm64
+Architecture: iphoneos-arm
 Description: Lightweight YouTube Enhancer
 Maintainer: Tonwalter888
 Author: Tonwalter888

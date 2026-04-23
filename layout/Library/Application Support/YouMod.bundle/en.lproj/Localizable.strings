@@ -20,8 +20,6 @@
 "FEED" = "Feed";
 "HIDE_SUBBAR" = "Hide subbar";
 "HIDE_SUBBAR_DESC" = "Hide subbar at the top of the feed.";
-"HIDE_HORIZONTAL_SHELF" = "Hide horizontal shelf";
-"HIDE_HORIZONTAL_SHELF_DESC" = "Hide horizontal shelf (eg. Continue watching, Listen again, Breaking news) from the feed.\nNOTE: This may leave a blank box in the feed.";
 "HIDE_MUSIC_PLAYLISTS" = "Hide music playlist generator";
 "HIDE_MUSIC_PLAYLISTS_DESC" = "Hide music playlist generator (Select music tunes from three) from the feed.\nNOTE: This may leave a blank box in the feed.";
 "HIDE_SHORTS_SHELF" = "Hide Shorts shelf";
@@ -78,3 +76,21 @@
 "HIDE_CREATE_BUTTON_DESC" = "Hide Create button from the tab bar.";
 "HIDE_SUBSCRIPT_TAB" = "Hide Subscriptions tab";
 "HIDE_SUBSCRIPT_TAB_DESC" = "Hide Subscriptions tab from the tab bar.";
+
+"MISCELLANEOUS" = "Miscellaneous";
+"DISABLES_SHORTS_PIP" = "Disables Shorts PiP";
+"DISABLES_SHORTS_PIP_DESC" = "Try to disables Shorts PiP, this might not 100% disables it.";
+"BLOCK_UPGRADE_DIALOGS" = "Block upgrade dialogs";
+"BLOCK_UPGRADE_DIALOGS_DESC" = "Block the YouTube dialogs that ask you to upgrade the app.";
+"ARE_YOU_THERE_DIALOG" = "Hide 'Are you there?' dialog";
+"ARE_YOU_THERE_DIALOG_DESC" = "Hide the dialog when you are inactive in the app for too long.";
+"FIXES_SLOW_MINIPLAYER" = "Fixes slows miniplayer";
+"FIXES_SLOW_MINIPLAYER_DESC" = "Fixes the miniplayer slowness of expanding the video, this only works in older YouTube versions.";
+"DISABLES_NEW_MINIPLAYER" = "Disables new miniplayer";
+"DISABLES_NEW_MINIPLAYER_DESC" = "Use the old-style miniplayer instead of the new one, this only works in older YouTube versions.";
+"DISABLES_SNACK_BAR" = "Disables snack bar";
+"DISABLES_SNACK_BAR_DESC" = "Disables snack bar when pressing some buttons or doing something in the app.";
+"HIDE_STARTUP_ANIMATIONS" = "Hide YouTube's startup animations";
+"HIDE_STARTUP_ANIMATIONS_DESC" = "Hide YouTube's startup animations when opening the app.";
+"HIDE_PLAY_IN_NEXT_QUEUE" = "Hide 'Play next in queue'";
+"HIDE_PLAY_IN_NEXT_QUEUE_DESC" = "Hide the 'Play next in queue' option from the flyout menu.";

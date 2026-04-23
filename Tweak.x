@@ -109,8 +109,34 @@
 
 - (void)didMoveToWindow {
     %orig;
-    if (IS_ENABLED(HideHoriShelf) && [self.accessibilityIdentifier isEqualToString:@"horizontal-video-shelf.view"]) self.hidden = YES;
-	if (IS_ENABLED(HideGenMusicShelf) && [self.accessibilityIdentifier isEqualToString:@"feed_nudge.view"]) self.hidden = YES;
+    if (IS_ENABLED(HideGenMusicShelf) && [self.accessibilityIdentifier isEqualToString:@"feed_nudge.view"]) self.hidden = YES;
+    if (IS_ENABLED(HideLikeButton) && [self.accessibilityIdentifier isEqualToString:@"id.video.like.button"]) self.hidden = YES;
+    if (IS_ENABLED(HideDisLikeButton) && [self.accessibilityIdentifier isEqualToString:@"id.video.dislike.button"]) self.hidden = YES;
+    if (IS_ENABLED(HideShareButton) && [self.accessibilityIdentifier isEqualToString:@"id.video.share.button"]) self.hidden = YES;
+    if (IS_ENABLED(HideDownloadButton) && [self.accessibilityIdentifier isEqualToString:@"id.ui.add_to.offline.button"]) self.hidden = YES;
+    if (IS_ENABLED(HideClipButton) && [self.accessibilityIdentifier isEqualToString:@"clip_button.eml"]) self.hidden = YES;
+    if (IS_ENABLED(HideRemixButton) && [self.accessibilityIdentifier isEqualToString:@"id.video.remix.button"]) self.hidden = YES;
+    if (IS_ENABLED(HideSaveButton) && [self.accessibilityIdentifier isEqualToString:@"id.video.add_to.button"]) self.hidden = YES;
+    /*
+            // identifiers
+            @"id.video.like.button": @"YouModHideLikeButton", // Like button
+            @"id.video.dislike.button": @"YouModHideDisLikeButton", // Dislike button
+            @"id.video.share.button": @"YouModHideShareButton", // Share button
+            @"id.ui.add_to.offline.button": @"YouModHideDownloadButton", // Download button
+            @"clip_button.eml": @"YouModHideClipButton", // Clip button
+            @"id.video.remix.button": @"YouModHideRemixButton", // Remix button
+            @"id.video.add_to.button": @"YouModHideSaveButton", // Save to playlist button
+            // @"id.ui.carousel_header": @"YouModHideRemixButton" // Comment section - TEST
+            Extra keys
+            id.reel_multi_format_link = Shorts -> full video
+            id.reel_like_button
+            id.reel_dislike_button
+            id.reel_comment_button
+            id.reel_share_button
+            id.reel_remix_button
+            id.reel_pivot_button Sound metadate in shorts
+            id.ui.video_metadata_carousel -> Preview comments in full video
+    */
 }
 
 %end
@@ -268,81 +294,96 @@
 }
 %end
 
-// อื่นๆ
-// Prevent YouTube from asking to update the app
+// Miscellaneous
+
+// Try to disable Shorts PiP
+%hook YTColdConfig
+- (BOOL)shortsPlayerGlobalConfigEnableReelsPictureInPicture { return IS_ENABLED(DisablesShortsPiP) ? NO : %orig; }
+- (BOOL)shortsPlayerGlobalConfigEnableReelsPictureInPictureIos { return IS_ENABLED(DisablesShortsPiP) ? NO : %orig; }
+%end
+
+%hook YTHotConfig
+- (BOOL)shortsPlayerGlobalConfigEnableReelsPictureInPictureAllowedFromPlayer { return IS_ENABLED(DisablesShortsPiP) ? NO : %orig; }
+%end
+
+%hook YTReelModel
+- (BOOL)isPiPSupported { return IS_ENABLED(DisablesShortsPiP) ? NO : %orig; }
+%end
+
+%hook YTReelPlayerViewController
+- (BOOL)isPictureInPictureAllowed { return IS_ENABLED(DisablesShortsPiP) ? NO : %orig; }
+%end
+
+%hook YTReelWatchRootViewController
+- (void)switchToPictureInPicture { if (!IS_ENABLED(DisablesShortsPiP)) %orig; }
+%end
+
+// Block upgrade dialogs
 %hook YTGlobalConfig
-- (BOOL)shouldBlockUpgradeDialog { return YES; }
-- (BOOL)shouldShowUpgradeDialog { return NO; }
-- (BOOL)shouldShowUpgrade { return NO; }
-- (BOOL)shouldForceUpgrade { return NO; }
+- (BOOL)shouldBlockUpgradeDialog { return IS_ENABLED(BlockUpgradeDialogs) ? YES : %orig; }
+- (BOOL)shouldShowUpgradeDialog { return IS_ENABLED(BlockUpgradeDialogs) ? NO : %orig; }
+- (BOOL)shouldShowUpgrade { return IS_ENABLED(BlockUpgradeDialogs) ? NO : %orig; }
+- (BOOL)shouldForceUpgrade { return IS_ENABLED(BlockUpgradeDialogs) ? NO : %orig; }
 %end
 
 // Prevent YouTube from asking "Are you there?"
 %hook YTColdConfig
-- (BOOL)enableYouthereCommandsOnIos { return NO; }
+- (BOOL)enableYouthereCommandsOnIos { return IS_ENABLED(BlockUpgradeDialogs) ? NO : %orig; }
 %end
 
 %hook YTYouThereController
-- (BOOL)shouldShowYouTherePrompt { return NO; }
-- (void)showYouTherePrompt {}
+- (BOOL)shouldShowYouTherePrompt { return IS_ENABLED(HideAreYouThereDialog) ? NO : %orig; }
+- (void)showYouTherePrompt { if (!IS_ENABLED(HideAreYouThereDialog)) %orig; }
 %end
 
 %hook YTYouThereControllerImpl
-- (BOOL)shouldShowYouTherePrompt { return NO; }
-- (void)showYouTherePrompt {}
+- (BOOL)shouldShowYouTherePrompt { return IS_ENABLED(HideAreYouThereDialog) ? NO : %orig; }
+- (void)showYouTherePrompt { if (!IS_ENABLED(HideAreYouThereDialog)) %orig; }
 %end
 
-/*
-%group SlowMiniPlayer
+// Fixes slow miniplayer
 %hook YTColdConfig
-- (BOOL)enableIosFloatingMiniplayerDoubleTapToResize { return NO; }
-%end
+- (BOOL)enableIosFloatingMiniplayerDoubleTapToResize { return IS_ENABLED(FixesSlowMiniPlayer) ? NO : %orig; }
 %end
 
-%group OldMiniPlayer
+// Use old miniplayer
 %hook YTColdConfig
-- (BOOL)enableIosFloatingMiniplayer { return NO; }
+- (BOOL)enableIosFloatingMiniplayer { return IS_ENABLED(DisablesNewMiniPlayer) ? NO : %orig; }
 %end
 
 %hook YTColdConfigWatchPlayerClientGlobalConfigImpl
-- (BOOL)enableIosFloatingMiniplayer { return NO; }
+- (BOOL)enableIosFloatingMiniplayer { return IS_ENABLED(DisablesNewMiniPlayer) ? NO : %orig; }
 %end
-%end
-*/
 
 // Disables Snackbar
 %hook GOOHUDManagerInternal
-- (id)sharedInstance { return nil; }
-- (void)showMessageMainThread:(id)arg {}
-- (void)activateOverlay:(id)arg {}
-- (void)displayHUDViewForMessage:(id)arg {}
+- (id)sharedInstance { return IS_ENABLED(DisablesSnackBar) ? nil : %orig; }
+- (void)showMessageMainThread:(id)arg { if (!IS_ENABLED(DisablesSnackBar)) %orig; }
+- (void)activateOverlay:(id)arg { if (!IS_ENABLED(DisablesSnackBar)) %orig; }
+- (void)displayHUDViewForMessage:(id)arg { if (!IS_ENABLED(DisablesSnackBar)) %orig; }
 %end
 
-/*
-// Try to disable Shorts PiP
-%group DisablesShortsPiP
+// Hide startup animations
 %hook YTColdConfig
-- (BOOL)shortsPlayerGlobalConfigEnableReelsPictureInPicture { return NO; }
-- (BOOL)shortsPlayerGlobalConfigEnableReelsPictureInPictureIos { return NO; }
+- (BOOL)mainAppCoreClientIosEnableStartupAnimation { return IS_ENABLED(HideStartupAni) ? NO : %orig; }
 %end
 
-%hook YTHotConfig
-- (BOOL)shortsPlayerGlobalConfigEnableReelsPictureInPictureAllowedFromPlayer { return NO; }
+// Remove "Play next in queue" from the menu @PoomSmart (https://github.com/qnblackcat/uYouPlus/issues/1138#issuecomment-1606415080)
+%hook YTMenuItemVisibilityHandler
+- (BOOL)shouldShowServiceItemRenderer:(YTIMenuConditionalServiceItemRenderer *)renderer {
+    if (renderer.icon.iconType == 251 && IS_ENABLED(HidePlayInNextQueue)) {
+        return NO;
+    } return %orig;
+}
 %end
 
-%hook YTReelModel
-- (BOOL)isPiPSupported { return NO; }
+%hook YTMenuItemVisibilityHandlerImpl
+- (BOOL)shouldShowServiceItemRenderer:(YTIMenuConditionalServiceItemRenderer *)renderer {
+    if (renderer.icon.iconType == 251 && IS_ENABLED(HidePlayInNextQueue)) {
+        return NO;
+    } return %orig;
+}
 %end
-
-%hook YTReelPlayerViewController
-- (BOOL)isPictureInPictureAllowed { return NO; }
-%end
-
-%hook YTReelWatchRootViewController
-- (void)switchToPictureInPicture {}
-%end
-%end
-*/
 
 /*
 // works i guess
@@ -395,7 +436,7 @@
 %end
 
 %hook YTFullscreenEngagementOverlayView
-- (void)setRelatedVideosView:(id)arg {} //works -hide recommend video after finished
+- (void)setRelatedVideosView:(id)arg {} // works - hide recommend video after finished
 %end
 
 // Disable Snap To Chapter (https://github.com/qnblackcat/uYouPlus/blob/main/uYouPlus.xm#L457-464) - GOT REMOVED
@@ -404,23 +445,7 @@
 // %end
 
 %hook YTModularPlayerBarController
-- (void)setEnableSnapToChapter:(BOOL)arg { %orig(NO); }
-%end
-
-// Disable Hints
-%hook YTSettings
-- (BOOL)areHintsDisabled { return YES; }
-- (void)setHintsDisabled:(BOOL)arg1 { %orig(YES); }
-%end
-
-%hook YTSettingsImpl
-- (BOOL)areHintsDisabled { return YES; }
-- (void)setHintsDisabled:(BOOL)arg1 { %orig(YES); }
-%end
-
-%hook YTUserDefaults
-- (BOOL)areHintsDisabled { return YES; }
-- (void)setHintsDisabled:(BOOL)arg1 { %orig(YES); }
+- (void)setEnableSnapToChapter:(BOOL)arg { %orig(NO); } // idk this works or not
 %end
 
 /* Wait for now
@@ -464,23 +489,6 @@
 }
 %end
 */
-
-// Remove "Play next in queue" from the menu @PoomSmart (https://github.com/qnblackcat/uYouPlus/issues/1138#issuecomment-1606415080)
-%hook YTMenuItemVisibilityHandler
-- (BOOL)shouldShowServiceItemRenderer:(YTIMenuConditionalServiceItemRenderer *)renderer {
-    if (renderer.icon.iconType == 251) {
-        return NO;
-    } return %orig;
-}
-%end
-
-%hook YTMenuItemVisibilityHandlerImpl
-- (BOOL)shouldShowServiceItemRenderer:(YTIMenuConditionalServiceItemRenderer *)renderer {
-    if (renderer.icon.iconType == 251) {
-        return NO;
-    } return %orig;
-}
-%end
 
 /* untested
 // Remove Download button from the menu
@@ -564,180 +572,3 @@ BOOL isTabSelected = NO;
 }
 %end
 */
-
-// Thanks to aricloverEXTRA for all of these logics! - not working very well but it works
-// YTHidePlayerButtons 1.0.0 - made by @aricloverEXTRA
-static NSDictionary<NSString *, NSString *> *HideToggleMap(void) {
-    static NSDictionary<NSString *, NSString *> *map = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        map = @{
-            // identifiers
-            @"id.video.like.button": @"YouModHideLikeButton", // Like button
-            @"id.video.dislike.button": @"YouModHideDisLikeButton", // Dislike button
-            @"id.video.share.button": @"YouModHideShareButton", // Share button
-            @"id.ui.add_to.offline.button": @"YouModHideDownloadButton", // Download button
-            @"clip_button.eml": @"YouModHideClipButton", // Clip button
-            @"id.video.remix.button": @"YouModHideRemixButton", // Remix button
-            @"id.video.add_to.button": @"YouModHideSaveButton", // Save to playlist button
-            @"id.ui.carousel_header": @"YouModHideRemixButton" // Comment section - TEST
-            /*
-            Extra keys
-            id.reel_multi_format_link = Shorts -> full video
-            id.reel_like_button
-            id.reel_dislike_button
-            id.reel_comment_button
-            id.reel_share_button
-            id.reel_remix_button
-            id.reel_pivot_button Sound metadate in shorts
-            id.ui.video_metadata_carousel -> Preview comments in full video
-            */
-        };
-    });
-    return map;
-}
-static BOOL shouldHideForKey(NSString *key) {
-    if (!key) return NO;
-    NSString *pref = HideToggleMap()[key];
-    if (!pref) return NO;
-    return IS_ENABLED(pref);
-}
-static void safeHideView(id view) {
-    if (!view) return;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        @try {
-            if ([view respondsToSelector:@selector(setHidden:)]) {
-                [view setHidden:YES];
-                return;
-            }
-            if ([view isKindOfClass:[UIView class]]) {
-                ((UIView *)view).hidden = YES;
-                return;
-            }
-        } @catch (NSException *ex) {
-            NSLog(@"[HidePlayerButtons] safeHideView exception: %@", ex);
-        }
-    });
-}
-static BOOL inspectAndHideIfMatch(id view) {
-    if (!view) return NO;
-    @try {
-        NSString *accId = nil;
-        if ([view respondsToSelector:@selector(accessibilityIdentifier)]) {
-            @try { accId = [view accessibilityIdentifier]; } @catch (NSException *e) { accId = nil; }
-            if (accId && shouldHideForKey(accId)) {
-                safeHideView(view);
-                return YES;
-            }
-        }
-        NSString *accLabel = nil;
-        if ([view respondsToSelector:@selector(accessibilityLabel)]) {
-            @try { accLabel = [view accessibilityLabel]; } @catch (NSException *e) { accLabel = nil; }
-            if (accLabel && shouldHideForKey(accLabel)) {
-                safeHideView(view);
-                return YES;
-            }
-        }
-        NSString *desc = nil;
-        @try { desc = [[view description] copy]; } @catch (NSException *e) { desc = nil; }
-        if (desc) {
-            for (NSString *key in HideToggleMap().allKeys) {
-                if ([desc containsString:key] && shouldHideForKey(key)) {
-                    safeHideView(view);
-                    return YES;
-                }
-            }
-        }
-    } @catch (NSException *ex) {
-        NSLog(@"[HidePlayerButtons] inspectAndHideIfMatch exception: %@", ex);
-    }
-    return NO;
-}
-static void traverseAndHideViews(UIView *root) {
-    if (!root) return;
-    @try {
-        inspectAndHideIfMatch(root);
-        NSArray<UIView *> *subs = nil;
-        @try { subs = root.subviews; } @catch (NSException *e) { subs = nil; }
-        if (subs && subs.count) {
-            for (UIView *sv in subs) {
-                if ([sv isKindOfClass:[UIView class]]) {
-                    traverseAndHideViews(sv);
-                }
-            }
-        }
-    } @catch (NSException *ex) {
-        NSLog(@"[HidePlayerButtons] traverseAndHideViews exception: %@", ex);
-    }
-}
-static void hideButtonsInActionBarIfNeeded(id collectionView) {
-    if (!collectionView) return;
-    @try {
-        // Ensure the collectionView has accessibilityIdentifier and we only operate on the action bar
-        NSString *accId = nil;
-        if ([collectionView respondsToSelector:@selector(accessibilityIdentifier)]) {
-            @try { accId = [collectionView accessibilityIdentifier]; } @catch (NSException *e) { accId = nil; }
-        }
-        if (!accId) return;
-        if (![accId isEqualToString:@"id.video.scrollable_action_bar"]) return;
-        NSArray *cells = nil;
-        if ([collectionView respondsToSelector:@selector(visibleCells)]) {
-            @try { cells = [collectionView visibleCells]; } @catch (NSException *e) { cells = nil; }
-        }
-        if (!cells || cells.count == 0) {
-            @try { cells = [collectionView subviews]; } @catch (NSException *e) { cells = nil; }
-        }
-        if (!cells || cells.count == 0) return;
-        for (id cell in cells) {
-            if ([cell isKindOfClass:[UIView class]]) {
-                traverseAndHideViews((UIView *)cell);
-            } else {
-                @try {
-                    if ([cell respondsToSelector:@selector(view)]) {
-                        id view = [cell performSelector:@selector(view)];
-                        if ([view isKindOfClass:[UIView class]]) {
-                            traverseAndHideViews((UIView *)view);
-                        }
-                    } else if ([cell respondsToSelector:@selector(node)]) {
-                        NSString *desc = nil;
-                        @try { desc = [cell description]; } @catch (NSException *e) { desc = nil; }
-                        if (desc) {
-                            // Not ideal to act on description, but we keep this non-destructive: only log for debugging
-                            // Uncomment logging for debug builds if needed.
-                            // NSLog(@"[HidePlayerButtons] Non-UIView cell description: %@", desc);
-                        }
-                    }
-                } @catch (NSException *ex) {
-                    NSLog(@"[HidePlayerButtons] Exception handling non-UIView cell: %@", ex);
-                }
-            }
-        }
-    } @catch (NSException *exception) {
-        NSLog(@"[HidePlayerButtons] hideButtonsInActionBarIfNeeded exception: %@", exception);
-    }
-}
-%hook ASCollectionView
-- (id)nodeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    id node = %orig;
-    id weakSelf = (id)self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        @try {
-            hideButtonsInActionBarIfNeeded(weakSelf);
-        } @catch (NSException *e) {
-            NSLog(@"[HidePlayerButtons] async hide exception: %@", e);
-        }
-    });
-    return node;
-}
-- (void)nodesDidRelayout:(NSArray *)nodes {
-    %orig;
-    id weakSelf = (id)self;
-    dispatch_async(dispatch_get_main_queue(), ^{
-        @try {
-            hideButtonsInActionBarIfNeeded(weakSelf);
-        } @catch (NSException *e) {
-            NSLog(@"[HidePlayerButtons] relayout hide exception: %@", e);
-        }
-    });
-}
-%end

@@ -30,7 +30,6 @@
 #define HideSearch @"YouModHideSearchButton"
 #define HideVoiceSearch @"YouModHideVoiceSearchButton"
 #define HideCastButtonNav @"YouModHideCastButtonNavigationBar"
-#define HideHoriShelf @"YouModHideHoriShelf"
 #define HideGenMusicShelf @"YouModHideGenMusicShelf"
 #define HideShortsShelf @"YouModHideShortsShelf"
 #define HideSubbar @"YouModHideSubbar"
@@ -61,6 +60,14 @@
 #define HideShortsTab @"YouModHideShortsTab"
 #define HideCreateButton @"YouModHideCreateButton"
 #define HideSubscriptTab @"YouModHideSubscriptionsTab"
+#define DisablesShortsPiP @"YouModTrytoDisablesShortsPiP"
+#define BlockUpgradeDialogs @"YouModBlockUpgradeDialogs"
+#define HideAreYouThereDialog @"YouModHideAreYouThereDialog"
+#define FixesSlowMiniPlayer @"YouModFixesSlowMiniPlayer"
+#define DisablesNewMiniPlayer @"YouModDisablesNewMiniPlayer"
+#define DisablesSnackBar @"YouModDisablesSnackBar"
+#define HideStartupAni @"YouModHideStartupAnimations"
+#define HidePlayInNextQueue @"YouModHidePlayInNextQueue"
 
 @interface YTITopbarLogoRenderer : NSObject
 @property(readonly, nonatomic) YTIIcon *iconImage;

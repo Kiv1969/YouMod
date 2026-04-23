@@ -258,18 +258,6 @@ NSBundle *YouModBundle() {
         settingItemId:0];
     [sectionItems addObject:hidesubbar];
 
-    // Hide Horizonal Shelf
-    YTSettingsSectionItem *hidehorishelf = [YTSettingsSectionItemClass switchItemWithTitle:LOC(@"HIDE_HORIZONTAL_SHELF")
-        titleDescription:LOC(@"HIDE_HORIZONTAL_SHELF_DESC")
-        accessibilityIdentifier:nil
-        switchOn:IS_ENABLED(HideHoriShelf)
-        switchBlock:^BOOL (YTSettingsCell *cell, BOOL enabled) {
-            [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:HideHoriShelf];
-            return YES;
-        }
-        settingItemId:0];
-    [sectionItems addObject:hidehorishelf];
-
     // Hide Music Playlist Generator
     YTSettingsSectionItem *hidemusicgen = [YTSettingsSectionItemClass switchItemWithTitle:LOC(@"HIDE_MUSIC_PLAYLISTS")
         titleDescription:LOC(@"HIDE_MUSIC_PLAYLISTS_DESC")
@@ -630,6 +618,113 @@ NSBundle *YouModBundle() {
         }
         settingItemId:0];
     [sectionItems addObject:hidesubscripttab];
+
+    // Section 5
+    // Miscellaneous
+    YTSettingsSectionItem *miscell = [YTSettingsSectionItemClass itemWithTitle:nil
+        titleDescription:LOC(@"MISCELLANEOUS")
+        accessibilityIdentifier:nil
+        detailTextBlock:nil
+        selectBlock:^BOOL (YTSettingsCell *cell, NSUInteger arg1) {
+            return NO;
+        }];
+    [sectionItems addObject:miscell];
+
+    // Try to disables Shorts PiP
+    YTSettingsSectionItem *shortsPiP = [YTSettingsSectionItemClass switchItemWithTitle:LOC(@"DISABLES_SHORTS_PIP")
+        titleDescription:LOC(@"DISABLES_SHORTS_PIP_DESC")
+        accessibilityIdentifier:nil
+        switchOn:IS_ENABLED(DisablesShortsPiP)
+        switchBlock:^BOOL (YTSettingsCell *cell, BOOL enabled) {
+            [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:DisablesShortsPiP];
+            return YES;
+        }
+        settingItemId:0];
+    [sectionItems addObject:shortsPiP];
+
+    // Block upgrade dialogs
+    YTSettingsSectionItem *upgradedialogs = [YTSettingsSectionItemClass switchItemWithTitle:LOC(@"BLOCK_UPGRADE_DIALOGS")
+        titleDescription:LOC(@"BLOCK_UPGRADE_DIALOGS_DESC")
+        accessibilityIdentifier:nil
+        switchOn:IS_ENABLED(BlockUpgradeDialogs)
+        switchBlock:^BOOL (YTSettingsCell *cell, BOOL enabled) {
+            [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:BlockUpgradeDialogs];
+            return YES;
+        }
+        settingItemId:0];
+    [sectionItems addObject:upgradedialogs];
+
+    // Hide "Are you there?" dialog
+    YTSettingsSectionItem *areyouthere = [YTSettingsSectionItemClass switchItemWithTitle:LOC(@"ARE_YOU_THERE_DIALOG")
+        titleDescription:LOC(@"ARE_YOU_THERE_DIALOG_DESC")
+        accessibilityIdentifier:nil
+        switchOn:IS_ENABLED(HideAreYouThereDialog)
+        switchBlock:^BOOL (YTSettingsCell *cell, BOOL enabled) {
+            [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:HideAreYouThereDialog];
+            return YES;
+        }
+        settingItemId:0];
+    [sectionItems addObject:areyouthere];
+
+     // Fixes Slow Miniplayer
+    YTSettingsSectionItem *slowMiniplayer = [YTSettingsSectionItemClass switchItemWithTitle:LOC(@"FIXES_SLOW_MINIPLAYER")
+        titleDescription:LOC(@"FIXES_SLOW_MINIPLAYER_DESC") // works only in old yt
+        accessibilityIdentifier:nil
+        switchOn:IS_ENABLED(FixesSlowMiniPlayer)
+        switchBlock:^BOOL (YTSettingsCell *cell, BOOL enabled) {
+            [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:FixesSlowMiniPlayer];
+            return YES;
+        }
+        settingItemId:0];
+    [sectionItems addObject:slowMiniplayer];
+
+    // Disables New Miniplayer
+    YTSettingsSectionItem *newminiplayer = [YTSettingsSectionItemClass switchItemWithTitle:LOC(@"DISABLES_NEW_MINIPLAYER")
+        titleDescription:LOC(@"DISABLES_NEW_MINIPLAYER_DESC") // works only in old yt
+        accessibilityIdentifier:nil
+        switchOn:IS_ENABLED(DisablesNewMiniPlayer)
+        switchBlock:^BOOL (YTSettingsCell *cell, BOOL enabled) {
+            [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:DisablesNewMiniPlayer];
+            return YES;
+        }
+        settingItemId:0];
+    [sectionItems addObject:newminiplayer];
+
+    // Disables Snackbar
+    YTSettingsSectionItem *snackBar = [YTSettingsSectionItemClass switchItemWithTitle:LOC(@"DISABLES_SNACK_BAR")
+        titleDescription:LOC(@"DISABLES_SNACK_BAR_DESC")
+        accessibilityIdentifier:nil
+        switchOn:IS_ENABLED(DisablesSnackBar)
+        switchBlock:^BOOL (YTSettingsCell *cell, BOOL enabled) {
+            [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:DisablesSnackBar];
+            return YES;
+        }
+        settingItemId:0];
+    [sectionItems addObject:snackBar];
+
+    // Hide startup animations
+    YTSettingsSectionItem *hidestartani = [YTSettingsSectionItemClass switchItemWithTitle:LOC(@"HIDE_STARTUP_ANIMATIONS")
+        titleDescription:LOC(@"HIDE_STARTUP_ANIMATIONS_DESC")
+        accessibilityIdentifier:nil
+        switchOn:IS_ENABLED(HideStartupAni)
+        switchBlock:^BOOL (YTSettingsCell *cell, BOOL enabled) {
+            [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:HideStartupAni];
+            return YES;
+        }
+        settingItemId:0];
+    [sectionItems addObject:hidestartani];
+
+    // Hide "Play next in queue" in flyout menu
+    YTSettingsSectionItem *hideplayinnext = [YTSettingsSectionItemClass switchItemWithTitle:LOC(@"HIDE_PLAY_IN_NEXT_QUEUE")
+        titleDescription:LOC(@"HIDE_PLAY_IN_NEXT_QUEUE_DESC")
+        accessibilityIdentifier:nil
+        switchOn:IS_ENABLED(HidePlayInNextQueue)
+        switchBlock:^BOOL (YTSettingsCell *cell, BOOL enabled) {
+            [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:HidePlayInNextQueue];
+            return YES;
+        }
+        settingItemId:0];
+    [sectionItems addObject:hideplayinnext];
 
     // More coming soon...
 
