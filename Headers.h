@@ -55,6 +55,9 @@
 #define HideGenMusicShelf @"YouModHideGenMusicShelf"
 #define HideShortsShelf @"YouModHideShortsShelf"
 #define HideSearchHis @"YouModHideSearchHistoryAndSuggestions"
+#define HideSubButton @"YouModHideSubscribeButton"
+#define HideShoppingButton @"YouModHideShoppingButton"
+#define HideMemberButton @"YouModHideMemberButton"
 // Player
 #define HideAutoPlayToggle @"YouModHideAutoPlayToggle"
 #define HideCaptionsButton @"YouModHideCaptionsButton"

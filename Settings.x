@@ -213,9 +213,8 @@ static NSString *GetCacheSize() { // YTLite - @dayanch96
         }];
     [sectionItems addObject:cache];
 
-    NSString *cacheDescription = [NSString stringWithFormat:@"%@", GetCacheSize()];
     YTSettingsSectionItem *clearCache = [YTSettingsSectionItemClass itemWithTitle:LOC(@"CLEARCACHE")
-        titleDescription:cacheDescription
+        titleDescription:GetCacheSize()
         accessibilityIdentifier:nil
         detailTextBlock:nil
         selectBlock:^BOOL (YTSettingsCell *cell, NSUInteger arg1) {
@@ -421,6 +420,42 @@ static NSString *GetCacheSize() { // YTLite - @dayanch96
         }
         settingItemId:0];
     [sectionItems addObject:hidesearchhis];
+
+    // Hide subscribe button
+    YTSettingsSectionItem *hidesubbutton = [YTSettingsSectionItemClass switchItemWithTitle:LOC(@"HIDE_SUB_BUTTON")
+        titleDescription:LOC(@"HIDE_SUB_BUTTON_DESC")
+        accessibilityIdentifier:nil
+        switchOn:IS_ENABLED(HideSubButton)
+        switchBlock:^BOOL (YTSettingsCell *cell, BOOL enabled) {
+            [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:HideSubButton];
+            return YES;
+        }
+        settingItemId:0];
+    [sectionItems addObject:hidesubbutton];
+
+    // Hide shopping button
+    YTSettingsSectionItem *hideshopbutton = [YTSettingsSectionItemClass switchItemWithTitle:LOC(@"HIDE_SHOP_BUTTON")
+        titleDescription:LOC(@"HIDE_SHOP_BUTTON_DESC")
+        accessibilityIdentifier:nil
+        switchOn:IS_ENABLED(HideShoppingButton)
+        switchBlock:^BOOL (YTSettingsCell *cell, BOOL enabled) {
+            [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:HideShoppingButton];
+            return YES;
+        }
+        settingItemId:0];
+    [sectionItems addObject:hideshopbutton];
+
+    // Hide member button
+    YTSettingsSectionItem *hidemembutton = [YTSettingsSectionItemClass switchItemWithTitle:LOC(@"HIDE_MEMBER_BUTTON")
+        titleDescription:LOC(@"HIDE_MEMBER_BUTTON_DESC")
+        accessibilityIdentifier:nil
+        switchOn:IS_ENABLED(HideMemberButton)
+        switchBlock:^BOOL (YTSettingsCell *cell, BOOL enabled) {
+            [[NSUserDefaults standardUserDefaults] setBool:enabled forKey:HideMemberButton];
+            return YES;
+        }
+        settingItemId:0];
+    [sectionItems addObject:hidemembutton];
 
     // Section 6
     // Player

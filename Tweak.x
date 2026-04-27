@@ -191,6 +191,9 @@ static BOOL isDarkMode(UIView *view) {
     if (IS_ENABLED(HideShortsSubscriptButton) && [self.accessibilityIdentifier isEqualToString:@"id.ui.shorts_paused_state.subscriptions_button"]) self.hidden = YES;
     if (IS_ENABLED(HideShortsLiveButton) && [self.accessibilityIdentifier isEqualToString:@"id.ui.shorts_paused_state.live_button"]) self.hidden = YES;
     if (IS_ENABLED(HideShortsToVideo) && [self.accessibilityIdentifier isEqualToString:@"id.reel_multi_format_link"]) self.hidden = YES;
+    if (IS_ENABLED(HideSubButton) && [self.accessibilityIdentifier isEqualToString:@"eml.animated_subscribe_button"]) self.hidden = YES;
+    if (IS_ENABLED(HideShoppingButton) && [self.accessibilityIdentifier isEqualToString:@"eml.header_store_button"]) self.hidden = YES;
+    if (IS_ENABLED(HideMemberButton) && [self.accessibilityIdentifier isEqualToString:@"id.sponsor_button"]) self.hidden = YES;
     if (([self.accessibilityIdentifier isEqualToString:@"eml.expandable_metadata.vpp"])) [self removeFromSuperview];
 }
 
