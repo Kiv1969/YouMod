@@ -150,7 +150,7 @@
 "TABBAR" = "Fanelinje";
 "DEFAULT_TAB" = "Standard fane";
 "DEFAULT_TAB_DESC" = "Du kan velge hvilken fane som åpnes når appen starter.";
-"HOME_NAME = "Hjem";
+"HOME_NAME" = "Hjem";
 "SUBSCRIPT_NAME" = "Abonnementer";
 "LIB_NAME" = "Bibliotek (Du)";
 "HIDE_TAB_INDI" = "Skjul indikatorer";
