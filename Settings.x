@@ -41,12 +41,6 @@ static NSString *GetCacheSize() { // YTLite - @dayanch96
     return [formatter stringFromByteCount:folderSize];
 }
 
-// Icon helper
-static UIImage *getIcon(int num) {
-    YTIIcon *icon = [%c(YTIIcon) new];
-    icon.iconType = num;
-}
-
 // Basic switch item - YTLitePlus
 #define BASIC_SWITCH(title, description, key) \
     [YTSettingsSectionItemClass switchItemWithTitle:title \
@@ -211,7 +205,7 @@ static UIImage *getIcon(int num) {
         [settingsViewController pushViewController:picker];
         return YES;
     }];
-    navbargroup.settingIcon = getIcon(60);
+    navbargroup.settingIcon = 60;
     [sectionItems addObject:navbargroup];
 
     // Section 3
@@ -231,7 +225,7 @@ static UIImage *getIcon(int num) {
         [settingsViewController pushViewController:picker];
         return YES;
     }];
-    feedgroup.settingIcon = getIcon(193);
+    feedgroup.settingIcon = 193;
     [sectionItems addObject:feedgroup];
 
     // Section 4
@@ -274,7 +268,7 @@ static UIImage *getIcon(int num) {
         [settingsViewController pushViewController:picker];
         return YES;
     }];
-    playergroup.settingIcon = getIcon(658);
+    playergroup.settingIcon = 658;
     [sectionItems addObject:playergroup];
 
     // Section 5
@@ -302,7 +296,7 @@ static UIImage *getIcon(int num) {
         [settingsViewController pushViewController:picker];
         return YES;
     }];
-    shortsgroup.settingIcon = getIcon(769);
+    shortsgroup.settingIcon = 769;
     [sectionItems addObject:shortsgroup];
 
     // Section 6
@@ -363,7 +357,7 @@ static UIImage *getIcon(int num) {
         [settingsViewController pushViewController:picker];
         return YES;
     }];
-    tabgroup.settingIcon = getIcon(66);
+    tabgroup.settingIcon = 66;
     [sectionItems addObject:tabgroup];
 
     // Section 7
@@ -385,7 +379,7 @@ static UIImage *getIcon(int num) {
         [settingsViewController pushViewController:picker];
         return YES;
     }];
-    othergroup.settingIcon = getIcon(1101);
+    othergroup.settingIcon = 1101;
     [sectionItems addObject:othergroup];
 
     // Section 8
@@ -461,7 +455,7 @@ static UIImage *getIcon(int num) {
         [settingsViewController pushViewController:picker];
         return YES;
     }];
-    perfgroup.settingIcon = getIcon(530);
+    perfgroup.settingIcon = 530;
     [sectionItems addObject:perfgroup];
 
     if ([settingsViewController respondsToSelector:@selector(setSectionItems:forCategory:title:icon:titleDescription:headerHidden:)]) {

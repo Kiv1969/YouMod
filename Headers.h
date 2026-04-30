@@ -222,30 +222,26 @@ typedef NS_ENUM(NSUInteger, GestureSection) {
 @interface YTFineScrubberFilmstripCollectionView : UICollectionView
 @end
 
-@interface YTPlayerViewController (YTLitePlus) <UIGestureRecognizerDelegate>
-@property (nonatomic, retain) UIPanGestureRecognizer *YTLitePlusPanGesture;
+@interface YTPlayerViewController (YouMod) <UIGestureRecognizerDelegate>
+@property (nonatomic, retain) UIPanGestureRecognizer *YouModPanGesture;
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer;
 @end
 
 @interface YTWatchFullscreenViewController : YTMultiSizeViewController
 @end
 
-@interface MPVolumeController : NSObject
-@property (nonatomic, assign, readwrite) float volumeValue;
-@end
-
-@interface YTPlayerBarController (YTLitePlus)
+@interface YTPlayerBarController (YouMod)
 - (void)didScrub:(UIPanGestureRecognizer *)gestureRecognizer;
 - (void)startScrubbing;
 - (void)didScrubToPoint:(CGPoint)point;
 - (void)endScrubbingForSeekSource:(int)seekSource;
 @end
 
-@interface YTMainAppVideoPlayerOverlayViewController (YTLitePlus)
+@interface YTMainAppVideoPlayerOverlayViewController (YouMod)
 @property (nonatomic, strong, readwrite) YTPlayerBarController *playerBarController;
 @end
 
-@interface YTInlinePlayerBarContainerView (YTLitePlus)
+@interface YTInlinePlayerBarContainerView (YouMod)
 @property UIPanGestureRecognizer *scrubGestureRecognizer;
 @property (nonatomic, strong, readwrite) YTFineScrubberFilmstripView *fineScrubberFilmstrip;
 - (CGFloat)scrubXForScrubRange:(CGFloat)scrubRange;
